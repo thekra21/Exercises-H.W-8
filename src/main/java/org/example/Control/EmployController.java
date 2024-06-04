@@ -1,10 +1,9 @@
-package Control;
+package org.example.Control;
 
-import dao.EmploysDAO;
+import org.example.dao.EmploysDAO;
 
 import jakarta.ws.rs.*;
-import models.Employs;
-import models.Jobs;
+import org.example.models.Employs;
 
 import java.util.ArrayList;
 
