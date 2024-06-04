@@ -1,21 +1,25 @@
-package Control;
+package org.example.Control;
 
-import dao.JobsDAO;
+import org.example.dao.JobsDAO;
 import jakarta.ws.rs.*;
-import models.Jobs;
+import org.example.models.Jobs;
 
 import java.util.ArrayList;
-
+@Path("/jobs")
 public class JobsController {
 
 
     JobsDAO dao = new JobsDAO();
 
     @GET
-    public ArrayList<Jobs> getAllJobs() {
+    public ArrayList<Jobs> getAllJobs(
+            @QueryParam("minSalary")Double minSalary ,
+            @QueryParam("limit")Integer limit,
+            @QueryParam("offset")int offset
+    ) {
 
         try {
-            return dao.selectAllJobs();
+            return dao.selectAllJobs(minSalary,limit,offset);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
