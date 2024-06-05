@@ -5,9 +5,11 @@ import org.example.dao.JobsDAO;
 import jakarta.ws.rs.*;
 import org.example.dto.JobsDto;
 import org.example.dto.JobsFileDto;
+import org.example.exceptions.DataNotFoundException;
 import org.example.models.Jobs;
 
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.ArrayList;
 @Path("/jobs")
 public class JobsController {
@@ -18,16 +20,25 @@ public class JobsController {
     JobsDAO dao = new JobsDAO();
 
     @GET
-    public ArrayList<Jobs> getAllJobs(
-//            @QueryParam("minSalary")Double minSalary ,
-//            @QueryParam("limit")Integer limit,
-//            @QueryParam("offset")int offset
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getAllJobs(
 
             @BeanParam JobsFileDto Fliter
     ) {
 
         try {
-            return dao.selectAllJobs(Fliter);
+            GenericEntity<ArrayList<Jobs>> jobs = new GenericEntity<ArrayList<Jobs>>(dao.selectAllJobs(Fliter)) {};
+            if(headers.getAcceptableMediaTypes().contains(MediaType.valueOf(MediaType.APPLICATION_XML))) {
+                return Response
+                        .ok(jobs)
+                        .type(MediaType.APPLICATION_XML)
+                        .build();
+            }
+
+            return Response
+                    .ok(jobs, MediaType.APPLICATION_JSON)
+                    .build();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -35,10 +46,14 @@ public class JobsController {
 
     @GET
     @Path("{jobId}")
-    public Response getJob(@PathParam("jobId") int jobId) {
+    public Response getJob(@PathParam("jobId") int jobId) throws SQLException {
 
         try {
+
             Jobs jobs = dao.selectJobs(jobId);
+            if (jobs == null) {
+                throw new DataNotFoundException("Jobs " + jobId + "Not found");
+            }
 
             JobsDto dto = new JobsDto();
           dto.setJob_id(jobs.getJob_id());
@@ -50,14 +65,13 @@ public class JobsController {
             AddLink(dto);
 
             return Response.ok(dto).build();
-        } catch (Exception e) {
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void AddLink(JobsDto dto) {
         URI selfUri = uriInfo.getAbsolutePath();
-
 
         dto.addLink(selfUri.toString(),"self");
     }
