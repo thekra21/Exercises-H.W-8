@@ -6,6 +6,7 @@ import jakarta.ws.rs.*;
 import org.example.models.Employs;
 
 import java.util.ArrayList;
+@Path("/employees")
 
 public class EmployController {
 
@@ -66,4 +67,21 @@ public class EmployController {
             throw new RuntimeException(e);
         }
     }
+
+//    @GET
+//    public ArrayList<Employs> getAllEmployees(@PathParam("jobId") Integer jobId) {
+//        System.out.println(jobId);
+//        ArrayList<Employs> employees = new ArrayList<>();
+//
+//        return employees;
+//    }
+
+//    @POST
+//    public void insertEmployee(@PathParam("jobId") Integer jobId, Employs emp) {
+//
+//        System.out.println(jobId);
+//        System.out.println(emp);
+//    }
+
+
 }

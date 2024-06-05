@@ -1,25 +1,33 @@
 package org.example.Control;
 
+import jakarta.ws.rs.core.*;
 import org.example.dao.JobsDAO;
 import jakarta.ws.rs.*;
+import org.example.dto.JobsDto;
+import org.example.dto.JobsFileDto;
 import org.example.models.Jobs;
 
+import java.net.URI;
 import java.util.ArrayList;
 @Path("/jobs")
 public class JobsController {
 
+    @Context UriInfo uriInfo;
+    @Context HttpHeaders headers;
 
     JobsDAO dao = new JobsDAO();
 
     @GET
     public ArrayList<Jobs> getAllJobs(
-            @QueryParam("minSalary")Double minSalary ,
-            @QueryParam("limit")Integer limit,
-            @QueryParam("offset")int offset
+//            @QueryParam("minSalary")Double minSalary ,
+//            @QueryParam("limit")Integer limit,
+//            @QueryParam("offset")int offset
+
+            @BeanParam JobsFileDto Fliter
     ) {
 
         try {
-            return dao.selectAllJobs(minSalary,limit,offset);
+            return dao.selectAllJobs(Fliter);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -27,13 +35,31 @@ public class JobsController {
 
     @GET
     @Path("{jobId}")
-    public Jobs getJob(@PathParam("jobId") int jobId) {
+    public Response getJob(@PathParam("jobId") int jobId) {
 
         try {
-            return dao.selectJobs(jobId);
+            Jobs jobs = dao.selectJobs(jobId);
+
+            JobsDto dto = new JobsDto();
+          dto.setJob_id(jobs.getJob_id());
+          dto.setJobs_Title(jobs.getJobs_Title());
+            dto.setMax_sal(jobs.getMax_sal());
+            dto.setMin_sal(jobs.getMin_sal());
+
+
+            AddLink(dto);
+
+            return Response.ok(dto).build();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void AddLink(JobsDto dto) {
+        URI selfUri = uriInfo.getAbsolutePath();
+
+
+        dto.addLink(selfUri.toString(),"self");
     }
 
     @DELETE
@@ -48,11 +74,17 @@ public class JobsController {
     }
 
     @POST
-    public void insertJob(Jobs job) {
+    @Consumes(MediaType.APPLICATION_XML)
+    public Response insertJob(Jobs job) {
 
         try {
             dao.insertJobs(job);
-
+            NewCookie cookie = (new NewCookie.Builder("username")).value("OOOOO").build();
+            URI uri = uriInfo.getAbsolutePathBuilder().path(job.getJob_id() + "").build();
+            return Response.status(Response.Status.CREATED)
+                    .cookie(new NewCookie("username", "OOOOO"))
+                    .header("Created by", "Thekra")
+                    .build();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -69,4 +101,5 @@ public class JobsController {
             throw new RuntimeException(e);
         }
     }
+
 }

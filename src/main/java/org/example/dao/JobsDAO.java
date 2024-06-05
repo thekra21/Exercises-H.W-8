@@ -1,5 +1,6 @@
 package org.example.dao;
 
+import org.example.dto.JobsFileDto;
 import org.example.models.Jobs;
 
 import java.sql.*;
@@ -59,20 +60,20 @@ public class JobsDAO {
     }
 
     // thera i do new for day6
-        public ArrayList<Jobs> selectAllJobs(Double minSalary, Integer limit, int offset) throws SQLException, ClassNotFoundException {
+        public ArrayList<Jobs> selectAllJobs(JobsFileDto Fliter) throws SQLException, ClassNotFoundException {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(URL);
 
             PreparedStatement st;
-            if(minSalary!=null){
+            if(Fliter.getMinSalary()!=null){
                 st = conn.prepareStatement(SELECT_MIN_SALARY_JOBS);
-                st.setDouble(1,minSalary);
+                st.setDouble(1,Fliter.getMinSalary());
 
-            } else if (minSalary != null && limit != null) {
+            } else if (Fliter.getMinSalary() != null &&Fliter.getLimit() != null) {
                 st = conn.prepareStatement(SELECT_MIN_SALARY_SORT_BY_JOBS);
-                st.setDouble(1,minSalary);
-                st.setInt(2, limit);
-                st.setInt(3, offset);
+                st.setDouble(1,Fliter.getMinSalary());
+                st.setInt(2, Fliter.getLimit());
+                st.setInt(3, Fliter.getOffset());
             }else {
                 st = conn.prepareStatement(SELECT_ALL_JOBS);
 

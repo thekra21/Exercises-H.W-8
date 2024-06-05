@@ -1,24 +1,28 @@
-package org.example.models;
+package org.example.dto;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
-public class Jobs {
+
+public class JobsDto {
  private String Jobs_Title;
  private int Job_id;
  private double min_sal;
  private double max_sal;
 
-    public Jobs() {
+    private ArrayList<LinkDto> links = new ArrayList<>();
+
+    public JobsDto() {
     }
 
-    public Jobs(String jobs_Title, int job_id, double min_sal, double max_sal) {
+    public JobsDto(String jobs_Title, int job_id, double min_sal, double max_sal) {
         Jobs_Title = jobs_Title;
         Job_id = job_id;
         this.min_sal = min_sal;
         this.max_sal = max_sal;
     }
-    public Jobs(ResultSet rs) throws SQLException {
+    public JobsDto(ResultSet rs) throws SQLException {
         Jobs_Title = rs.getString("Job_Title");
         Job_id = rs.getInt("Job_id");
         min_sal = rs.getDouble("min_salary");
@@ -26,6 +30,17 @@ public class Jobs {
 
     }
 
+
+    public ArrayList<LinkDto> getLinks() {
+        return links;
+    }
+
+    public void addLink(String url, String rel) {
+        LinkDto link = new LinkDto();
+        link.setLink(url);
+        link.setRel(rel);
+        links.add(link);
+    }
     @Override
     public String toString() {
         return "Jobs{" +
