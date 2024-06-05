@@ -8,8 +8,7 @@ public class LinkDto {
     public String getLink() {
         return link;
     }
-
-    public void setLink(String link) {
+     public void setLink(String link) {
         this.link = link;
     }
 

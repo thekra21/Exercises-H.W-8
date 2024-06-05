@@ -13,6 +13,7 @@ public class JobsFileDto
         return minSalary;
     }
 
+
     public void setMinSalary(Double minSalary) {
         this.minSalary = minSalary;
     }

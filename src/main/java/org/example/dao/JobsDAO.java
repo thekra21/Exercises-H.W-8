@@ -27,6 +27,7 @@ public class JobsDAO {
         st.setDouble(3,j.getMax_sal());
         st.executeUpdate();
     }
+
     public void updateJobs(Jobs j) throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         Connection conn = DriverManager.getConnection(URL);

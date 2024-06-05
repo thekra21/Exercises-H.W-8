@@ -15,6 +15,7 @@ public class EmploysDAO {
     private static final String UPDATE_EMPLOYS = "update departments set frist_name = ?, last_name = ?,email=? ,phone-number =? ,hire_date=?,job_id=?,salary=?,manger_id=?, department_id=? where employee_id = ?";
     private static final String DELETE_EMPLOYS = "delete from jobs where employee_id = ?";
 
+
     public void insertEmployees(Employs e) throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         Connection conn = DriverManager.getConnection(URL);

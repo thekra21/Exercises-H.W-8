@@ -12,6 +12,8 @@ public class Jobs {
     public Jobs() {
     }
 
+
+
     public Jobs(String jobs_Title, int job_id, double min_sal, double max_sal) {
         Jobs_Title = jobs_Title;
         Job_id = job_id;
