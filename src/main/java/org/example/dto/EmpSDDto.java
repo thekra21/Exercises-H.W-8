@@ -41,7 +41,7 @@ public class EmpSDDto {
 
     @Override
     public String toString() {
-        return  deptCode  + idSeq +
+        return   deptCode  + idSeq +
                 hirYear ;
     }
 }

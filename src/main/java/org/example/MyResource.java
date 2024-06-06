@@ -49,7 +49,7 @@ public class MyResource {
     @GET
     @Path("/employees/{empId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public EmpSDDto getDate(@PathParam("empId") EmpSDDto empId) {
+    public EmpSDDto getDate(@PathParam("empId") EmpSDDto  empId) {
         return empId;
     }
 
