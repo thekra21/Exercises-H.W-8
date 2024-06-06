@@ -20,7 +20,7 @@ public class JobsController {
     JobsDAO dao = new JobsDAO();
 
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, "text/csv"})
     public Response getAllJobs(
 
             @BeanParam JobsFileDto Fliter
@@ -32,6 +32,11 @@ public class JobsController {
                 return Response
                         .ok(jobs)
                         .type(MediaType.APPLICATION_XML)
+                        .build();
+            }else if(headers.getAcceptableMediaTypes().contains(MediaType.valueOf("text/csv"))) {
+                return Response
+                        .ok(jobs)
+                        .type("text/csv")
                         .build();
             }
 
@@ -46,6 +51,7 @@ public class JobsController {
 
     @GET
     @Path("{jobId}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, "text/csv"})
     public Response getJob(@PathParam("jobId") int jobId) throws SQLException {
 
         try {
