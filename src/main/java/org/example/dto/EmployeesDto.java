@@ -1,22 +1,34 @@
-package org.example.models;
+package org.example.dto;
 
+import org.example.dao.EmploysDAO;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
-public class Employs {
+public class EmployeesDto {
 
-private int employee_id;
-private String first_name;
-private String last_name;
-private String email;
-private String phone_number;
-private String hire_date;
-private int job_id;
-private double salary;
-private int manager_id;
-private int department_id;
+    private int employee_id;
+    private String first_name;
+    private String last_name;
+    private String email;
+    private String phone_number;
+    private String hire_date;
+    private int job_id;
+    private double salary;
+    private int manager_id;
+    private int department_id;
 
-    public Employs(int employee_id, String first_name, String last_name, String email, String phone_number, String hire_date, int job_id, double salary, int manager_id, int department_id) {
+
+    private ArrayList<LinkDto> links = new ArrayList<>();
+
+
+    public EmployeesDto() {
+    }
+
+    public EmployeesDto(int employee_id, String first_name, String last_name, String email, String phone_number, String hire_date, int job_id, double salary, int manager_id, int department_id) {
         this.employee_id = employee_id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -29,26 +41,23 @@ private int department_id;
         this.department_id = department_id;
     }
 
-    public Employs(ResultSet rs) throws SQLException {
 
+    public EmployeesDto(ResultSet rs) throws SQLException{
         employee_id = rs.getInt("employee_id");
-        first_name= rs.getString("first_name");
-        last_name=rs.getString("last_name");
-        email=rs.getString("email");
-        phone_number=rs.getString("phone_number");
-        hire_date=rs.getString("hire_date");
-        job_id=rs.getInt("job_id");
-        salary=rs.getDouble("salary");
-        manager_id=rs.getInt("manager_id");
-        department_id=rs.getInt("department_id");
-
-
+        first_name =rs.getString("first_name");
+        last_name = rs.getString("last_name");
+        email = rs.getString("email");
+        phone_number = rs.getString("phone_number");
+        hire_date = rs.getString("hire_date");
+        job_id = rs.getInt("job_id");
+        salary = rs.getDouble("salary");
+        manager_id = rs.getInt("manager_id");
+        department_id =rs.getInt("department_id");
     }
-
 
     @Override
     public String toString() {
-        return "Employs{" +
+        return "EmployeesDto{" +
                 "employee_id=" + employee_id +
                 ", first_name='" + first_name + '\'' +
                 ", last_name='" + last_name + '\'' +
@@ -61,6 +70,19 @@ private int department_id;
                 ", department_id=" + department_id +
                 '}';
     }
+    @XmlElementWrapper
+    @XmlElement(name = "link")
+    public ArrayList<LinkDto> getLinks() {
+        return links;
+    }
+
+    public void addLink(String url, String rel) {
+        LinkDto link = new LinkDto();
+        link.setLink(url);
+        link.setRel(rel);
+        links.add(link);
+    }
+
 
     public int getEmployee_id() {
         return employee_id;
@@ -118,20 +140,20 @@ private int department_id;
         this.job_id = job_id;
     }
 
+    public int getManager_id() {
+        return manager_id;
+    }
+
+    public void setManager_id(int manager_id) {
+        this.manager_id = manager_id;
+    }
+
     public double getSalary() {
         return salary;
     }
 
     public void setSalary(double salary) {
         this.salary = salary;
-    }
-
-    public int getManger_id() {
-        return manager_id;
-    }
-
-    public void setManger_id(int manger_id) {
-        this.manager_id = manger_id;
     }
 
     public int getDepartment_id() {

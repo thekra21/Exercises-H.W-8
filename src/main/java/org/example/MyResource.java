@@ -1,5 +1,6 @@
 package org.example;
 
+import jakarta.inject.Singleton;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
@@ -10,8 +11,13 @@ import org.example.dto.EmpSDDto;
 /**
  * Root resource (exposed at "myresource" path)
  */
+@Singleton
 @Path("myresource")
 public class MyResource {
+
+    int count = 0;
+    @Context HttpHeaders headers ;
+    @Context UriInfo uriInfo;
 
     /**
      * Method handling HTTP GET requests. The returned object will be sent
@@ -22,9 +28,9 @@ public class MyResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getIt(@HeaderParam("apikey")String apikey,
-                        @CookieParam("username")String username,
-                        @Context HttpHeaders headers ,
-                        @Context UriInfo uriInfo
+                        @CookieParam("username")String username
+//                        @Context HttpHeaders headers ,
+//                        @Context UriInfo uriInfo
     )
     {
 
@@ -39,10 +45,10 @@ public class MyResource {
         System.out.println(uriInfo.getQueryParameters().get("jobId"));
 
 
+        count += 1;
 
 
-
-        return "Got it! name: "+ username + " , apikey: "+ apikey ;
+        return "Got it! name: "+ count + username + " , apikey: "+ apikey ;
     }
 
 

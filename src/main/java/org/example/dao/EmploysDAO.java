@@ -1,5 +1,6 @@
 package org.example.dao;
 
+import org.example.dto.EmployeesFileDto;
 import org.example.models.Employs;
 
 import java.sql.*;
@@ -10,9 +11,11 @@ public class EmploysDAO {
 
     private static final String URL ="jdbc:sqlite:C:\\Users\\dev\\IdeaProjects\\myproject\\src\\main\\java\\hr.db";
     private static final String SELECT_ALL_EMPLOYS = "select * from employees";
-    private static final String SELECT_ONE_EMPLOYS = "select * from jobs where employee_id = ?";
-    private static final String INSERT_EMPLOYS = "insert into jobs values (?, ?, ?,?,?,?,?,?,?)";
-    private static final String UPDATE_EMPLOYS = "update departments set frist_name = ?, last_name = ?,email=? ,phone-number =? ,hire_date=?,job_id=?,salary=?,manger_id=?, department_id=? where employee_id = ?";
+    private static final String SELECT_ONE_EMPLOYS = "select * from employees where employee_id = ?";
+    private static final String SELECT_BY_HIRE_DATE = "select * from employees where hire_date=?";
+    private static final String SELECT_BY_JOB_ID = "select * from employees where job_id=?";
+    private static final String INSERT_EMPLOYS = "insert into employees values (?, ?, ?,?,?,?,?,?,?)";
+    private static final String UPDATE_EMPLOYS = "update departments set frist_name = ?, last_name = ?,email=? ,phone_number =? ,hire_date=?,job_id=?,salary=?,manager_id=?, department_id=? where employee_id = ?";
     private static final String DELETE_EMPLOYS = "delete from jobs where employee_id = ?";
 
 
@@ -57,11 +60,11 @@ public class EmploysDAO {
         st.executeUpdate();
     }
 
-    public Employs selectEmployees(int emplyees_id) throws SQLException, ClassNotFoundException {
+    public Employs selectEmployees(int emplyee_id) throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         Connection conn = DriverManager.getConnection(URL);
         PreparedStatement st = conn.prepareStatement(SELECT_ONE_EMPLOYS);
-        st.setInt(1, emplyees_id);
+        st.setInt(1, emplyee_id);
         ResultSet rs = st.executeQuery();
         if (rs.next()) {
             return new Employs(rs);
@@ -69,10 +72,24 @@ public class EmploysDAO {
             return null;
         }
     }
-        public ArrayList<Employs> selectAllEmploys() throws SQLException, ClassNotFoundException {
+        public ArrayList<Employs> selectAllEmploys(EmployeesFileDto Fliter) throws SQLException, ClassNotFoundException {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(URL);
-            PreparedStatement st = conn.prepareStatement(SELECT_ALL_EMPLOYS);
+            PreparedStatement st ;
+
+            if (Fliter.getHire_date() != null) {
+
+                st = conn.prepareStatement(SELECT_BY_HIRE_DATE);
+                st.setString(1,Fliter.getHire_date());
+
+            } else if (Fliter.getJob_id() != null) {
+                st = conn.prepareStatement(SELECT_BY_JOB_ID);
+                st.setInt(1,Fliter.getJob_id());
+
+            }else {
+                st = conn.prepareStatement(SELECT_ALL_EMPLOYS);
+
+            }
             ResultSet rs = st.executeQuery();
             ArrayList<Employs> employs = new ArrayList<>();
             while (rs.next()) {
