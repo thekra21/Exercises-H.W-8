@@ -3,23 +3,58 @@ package org.example.dto;
 import jakarta.ws.rs.QueryParam;
 
 public class EmployeesFileDto {
+    @QueryParam("employeeId")
+    private Integer employeeId;
 
-    private @QueryParam("hire_date")String hire_date;
-    private @QueryParam("job_id")Integer job_id;
+    @QueryParam("limit")
+    private Integer limit;
 
-    public String getHire_date() {
-        return hire_date;
+    @QueryParam("offset")
+    private int offset;
+
+    @QueryParam("hireYear") // Query parameter for hire year
+    private Integer hireYear;
+
+    @QueryParam("jobId") // Query parameter for job ID
+    private Integer jobId;
+
+    public Integer getEmployeeId() {
+        return employeeId;
     }
 
-    public void setHire_date(String hire_date) {
-        this.hire_date = hire_date;
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
     }
 
-    public Integer getJob_id() {
-        return job_id;
+    public Integer getLimit() {
+        return limit;
     }
 
-    public void setJob_id(Integer job_id) {
-        this.job_id = job_id;
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+    public Integer getHireYear() {
+        return hireYear;
+    }
+
+    public void setHireYear(Integer hireYear) {
+        this.hireYear = hireYear;
+    }
+
+    public Integer getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Integer jobId) {
+        this.jobId = jobId;
     }
 }

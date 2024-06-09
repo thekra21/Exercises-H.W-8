@@ -6,6 +6,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.UriInfo;
+import org.example.dao.EmployeeIdDto;
 import org.example.dto.EmpSDDto;
 
 /**
@@ -52,13 +53,19 @@ public class MyResource {
     }
 
 
+//    @GET
+//    @Path("/employees/{empId}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public EmpSDDto getDate(@PathParam("empId") EmpSDDto  empId) {
+//        return empId;
+//    }
+
     @GET
     @Path("/employees/{empId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public EmpSDDto getDate(@PathParam("empId") EmpSDDto  empId) {
+    public EmployeeIdDto getDate(@PathParam("empId") EmployeeIdDto empId) {
         return empId;
     }
-
 
 
 }

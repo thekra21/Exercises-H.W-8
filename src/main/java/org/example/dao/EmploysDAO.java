@@ -13,7 +13,9 @@ public class EmploysDAO {
     private static final String SELECT_ALL_EMPLOYS = "select * from employees";
     private static final String SELECT_ONE_EMPLOYS = "select * from employees where employee_id = ?";
     private static final String SELECT_BY_HIRE_DATE = "select * from employees where hire_date=?";
+
     private static final String SELECT_BY_JOB_ID = "select * from employees where job_id=?";
+    private static final String SELECT_BY_JOB_ID_SORT_BY_LIMIT = "select * from employees order by limit =? ,offset = ? where job_id=?";
     private static final String INSERT_EMPLOYS = "insert into employees values (?, ?, ?,?,?,?,?,?,?)";
     private static final String UPDATE_EMPLOYS = "update departments set frist_name = ?, last_name = ?,email=? ,phone_number =? ,hire_date=?,job_id=?,salary=?,manager_id=?, department_id=? where employee_id = ?";
     private static final String DELETE_EMPLOYS = "delete from jobs where employee_id = ?";
@@ -77,14 +79,10 @@ public class EmploysDAO {
             Connection conn = DriverManager.getConnection(URL);
             PreparedStatement st ;
 
-            if (Fliter.getHire_date() != null) {
+            if (Fliter.getLimit() != null) {
 
-                st = conn.prepareStatement(SELECT_BY_HIRE_DATE);
-                st.setString(1,Fliter.getHire_date());
-
-            } else if (Fliter.getJob_id() != null) {
-                st = conn.prepareStatement(SELECT_BY_JOB_ID);
-                st.setInt(1,Fliter.getJob_id());
+                st = conn.prepareStatement(SELECT_BY_JOB_ID_SORT_BY_LIMIT);
+                st.setInt(1, Fliter.getLimit());
 
             }else {
                 st = conn.prepareStatement(SELECT_ALL_EMPLOYS);
@@ -98,9 +96,40 @@ public class EmploysDAO {
 
             return employs;
         }
+    public ArrayList<Employs> selectEmployeesByJobId(int jobId) throws SQLException, ClassNotFoundException {
+        Class.forName("org.sqlite.JDBC");
+        Connection conn = DriverManager.getConnection(URL);
+        PreparedStatement st = conn.prepareStatement(SELECT_BY_JOB_ID);
+        st.setInt(1, jobId);
+        ResultSet rs = st.executeQuery();
 
+        ArrayList<Employs> employees = new ArrayList<>();
+        while (rs.next()) {
+            employees.add(new Employs(rs));
+        }
 
+        return employees;
     }
+
+    public ArrayList<Employs> selectEmployeesByHireYear(int hireYear) throws SQLException, ClassNotFoundException {
+        Class.forName("org.sqlite.JDBC");
+        Connection conn = DriverManager.getConnection(URL);
+
+        PreparedStatement st = conn.prepareStatement(SELECT_BY_HIRE_DATE);
+        st.setString(1, "%" + hireYear + "%"); // Assuming hire_date is stored as a string with the format 'YYYY-MM-DD'
+        ResultSet rs = st.executeQuery();
+
+        ArrayList<Employs> employees = new ArrayList<>();
+        while (rs.next()) {
+            employees.add(new Employs(rs));
+        }
+
+        return employees;
+    }
+
+
+
+}
 
 
 
